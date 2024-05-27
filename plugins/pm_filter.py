@@ -96,7 +96,7 @@ async def pm_spoll_tester(bot, query):
         await k.delete()
 
 
-async def pm_auto_filter(client, msg, spoll=False):
+async def auto_filter(client, msg, spoll=False):
     if not spoll:
         message = msg
         settings = await get_settings(message.chat.id)
