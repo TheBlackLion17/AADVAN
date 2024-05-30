@@ -2,7 +2,7 @@ import asyncio, re, ast, math, logging, pyrogram
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 from Script import script
 from utils import get_shortlink 
-from info import AUTH_USERS, PM_IMDB, SINGLE_BUTTON, PROTECT_CONTENT, SPELL_CHECK_REPLY, IMDB_TEMPLATE, IMDB_DELET_TIME, PMFILTER, G_FILTER, SHORT_URL, SHORT_API, REQ_CHANNEL
+from info import AUTH_USERS, PM_IMDB, SINGLE_BUTTON, PROTECT_CONTENT, SPELL_CHECK_REPLY, IMDB_TEMPLATE, IMDB_DELET_TIME, PMFILTER, G_FILTER, SHORT_URL, SHORT_API
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from pyrogram import Client, filters, enums 
 from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
@@ -96,37 +96,16 @@ async def pm_spoll_tester(bot, query):
         await k.delete()
 
 
-async def auto_filter(client, msg, spoll=False):
-    if not spoll:
-        message = msg
-        settings = await get_settings(message.chat.id)
+async def pm_AutoFilter(client, msg, pmspoll=False):    
+    if not pmspoll:
+        message = msg   
         if message.text.startswith("/"): return  # ignore commands
-        if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
-            return
+        if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text): return
         if 2 < len(message.text) < 100:
             search = message.text
-            requested_movie = search.strip()
-            user_id = message.from_user.id
-            # Send notification to admin dashboard
-            await client.send_message(REQ_CHANNEL, f"-🦋 #REQUESTED_CONTENT 🦋-\n\n📝**Content Name** :`{search}`\n**Requested By**: {message.from_user.first_name}\n **USER ID**:{user_id}\n\n🗃️",
-                                       reply_markup=InlineKeyboardMarkup([
-                                           [InlineKeyboardButton(text=f"🤞Request Recieved", callback_data=f"notify_user_req_rcvd:{user_id}:{requested_movie}")],
-                                           [InlineKeyboardButton(text=f"✅Upload Done", callback_data=f"notify_userupl:{user_id}:{requested_movie}")],
-                                           [InlineKeyboardButton(text=f"⚡Already Upl..", callback_data=f"notify_user_alrupl:{user_id}:{requested_movie}"),InlineKeyboardButton("🖊Spell Error", callback_data=f"notify_user_spelling_error:{user_id}:{requested_movie}")],
-                                           [InlineKeyboardButton(text=f"😒Not Available", callback_data=f"notify_user_not_avail:{user_id}:{requested_movie}")],
-                                           [InlineKeyboardButton("❌Reject Req", callback_data=f"notify_user_req_rejected:{user_id}:{requested_movie}")]
-                                       ]))
-            l = await message.reply_text(text=f"△ 𝙷𝚎𝚢 𝚜𝚘𝚗𝚊 `{message.from_user.first_name}` 😎,\n\nʏᴏᴜʀ ʀᴇQᴜᴇꜱᴛ ʜᴀꜱ ʙᴇᴇɴ ꜱᴇɴᴛ ᴛᴏ ᴏᴜʀ **ᴀᴅᴍɪɴ'ꜱ ᴅᴀꜱʜʙᴏᴀʀᴅ** !\nᴘʟᴇᴀꜱᴇ ᴋᴇᴇᴘ ꜱᴏᴍᴇ ᴘᴀᴛɪᴇɴᴄᴇ !\nᴛʜᴇʏ ᴡɪʟʟ ᴜᴘʟᴏᴀᴅ ɪᴛ ᴀꜱ ꜱᴏᴏɴ ᴀꜱ ᴘᴏꜱꜱɪʙʟᴇ.\n\n➟ 📝𝘾𝙤𝙣𝙩𝙚𝙣𝙩 𝙣𝙖𝙢𝙚 : `{search}`\n➟ 👮𝙍𝙚𝙦𝙪𝙚𝙨𝙩𝙚𝙙 𝘽𝙮 : `{message.from_user.first_name}`\n\n༺ @{MAIN_CHANNEL_USRNM} ༻\n\n🦋・‥☆𝘼𝘿𝙈𝙞𝙉 𝙨𝙪𝙥𝙥𝙤𝙧𝙩☆‥・🦋\n╰┈➤・☆ @{ADMIN_USRNM}\n╰┈➤・☆ @{ADMIN_USRNM}",
-                                       reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("━ • │▌║  ᗩᗪᗪ ʍɛ 2 ᑌᖇ Ǥᖇᗝᑌᑭ  ║▌│ • ━", url=f'http://t.me/{temp.U_NAME}?startgroup=true')],[InlineKeyboardButton("✪ Dev Ch- ✪", url=f"https://t.me/{DEV_CHANNEL_USRNM}"), InlineKeyboardButton("✪ ＹＴ ✪", url=f"https://youtube.com/@{LAZY_YT_HANDLE}"), InlineKeyboardButton("✪ Main Ch- ✪", url=f"https://t.me/{MAIN_CHANNEL_USRNM}")],[InlineKeyboardButton("╚»♥️ Thank You ♥️«╝", callback_data="close_data")]]))
-            await asyncio.sleep(12)
-            await l.delete()
-            if settings["spell_check"]:
-                return await advantage_spell_chok(msg)
-            else:
-                return
-        else:
-            return 
-
+            files, offset, total_results = await get_search_results(search.lower(), offset=0, filter=True)
+            if not files: return await pm_spoll_choker(msg)              
+        else: return 
     else:
         message = msg.message.reply_to_message  # msg will be callback query
         search, files, offset, total_results = pmspoll
@@ -259,6 +238,3 @@ async def pm_spoll_choker(msg):
     btn = [[InlineKeyboardButton(text=movie.strip(), callback_data=f"pmspolling#{user}#{k}")] for k, movie in enumerate(movielist)]
     btn.append([InlineKeyboardButton(text="Close", callback_data=f'pmspolling#{user}#close_spellcheck')])
     await msg.reply("I Cᴏᴜʟᴅɴ'ᴛ Fɪɴᴅ Aɴʏᴛʜɪɴɢ Rᴇʟᴀᴛᴇᴅ Tᴏ Tʜᴀᴛ. Dɪᴅ Yᴏᴜ Mᴇᴀɴ Aɴʏ Oɴᴇ Oғ Tʜᴇsᴇ?", reply_markup=InlineKeyboardMarkup(btn), quote=True)
-
-
-
