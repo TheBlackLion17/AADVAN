@@ -16,7 +16,6 @@ from database.ia_filterdb import Media, get_file_details, get_search_results
 from database.filters_mdb import del_all, find_filter, get_filters
 from database.gfilters_mdb import find_gfilter, get_gfilters
 
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
@@ -191,6 +190,7 @@ async def auto_filter(client, msg, spoll=False):
             search = message.text
             files, offset, total_results = await get_search_results(search.lower(), offset=0, filter=True)
             if not files:
+                if settings["spell_check"]:
                     return await advantage_spell_chok(msg)
                 else:
                     return
