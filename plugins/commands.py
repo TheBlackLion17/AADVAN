@@ -17,7 +17,7 @@ BATCH_FILES = {}
 async def start(client, message):
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         buttons = [[           
-            InlineKeyboardButton('📢 Uᴩᴅᴀᴛᴇꜱ 📢', url=f'https://t.me/{SUPPORT_CHAT}')
+            InlineKeyboardButton('♦️ᴜᴩᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ♦️', url=f'https://t.me/{SUPPORT_CHAT}')
             ],[
             InlineKeyboardButton('ℹ️ Hᴇʟᴩ ℹ️', url=f"https://t.me/{temp.U_NAME}?start=help")
         ]]
@@ -33,13 +33,13 @@ async def start(client, message):
         await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention, message.from_user.username, temp.U_NAME))
     if len(message.command) != 2:
         buttons = [[
-            InlineKeyboardButton("➕️ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Cʜᴀᴛ ➕", url=f"http://t.me/{temp.U_NAME}?startgroup=true")
+            InlineKeyboardButton("✨ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀᴛ✨ ", url=f"http://t.me/{temp.U_NAME}?startgroup=true")
             ],[
-            InlineKeyboardButton("Sᴇᴀʀᴄʜ 🔎", switch_inline_query_current_chat=''), 
-            InlineKeyboardButton("Cʜᴀɴɴᴇʟ 🔈", url="https://t.me/AgsModsOG")
+            InlineKeyboardButton("ꜱᴇᴀʀᴄʜ 🔎", switch_inline_query_current_chat=''), 
+            InlineKeyboardButton("ᴄʜᴀɴɴᴇʟ 🔈", url="https://t.me/AgsModsOG")
             ],[      
-            InlineKeyboardButton("Hᴇʟᴩ 🕸️", callback_data="help"),
-            InlineKeyboardButton("Aʙᴏᴜᴛ ✨", callback_data="about")
+            InlineKeyboardButton("ʜᴇʟᴩ", callback_data="help"),
+            InlineKeyboardButton("ᴀʙᴏᴜᴛ ✨", callback_data="about")
         ]]
         m = await message.reply_sticker("CAACAgUAAxkBAAJZtmZSPxpeDEIwobQtSQnkeGbwNjsyAAJjDgACjPuwVS9WyYuOlsqENQQ") 
         await asyncio.sleep(2)
@@ -52,16 +52,16 @@ async def start(client, message):
         except ChatAdminRequired:
             logger.error("MAKE SURE BOT IS ADMIN IN FORCESUB CHANNEL")
             return
-        btn = [[InlineKeyboardButton("Jᴏɪɴ Mʏ Cʜᴀɴɴᴇʟ ✨", url=invite_link.invite_link),
+        btn = [[InlineKeyboardButton("ᴊᴏɪɴ ᴍʏ ᴄʜᴀɴɴᴇʟ 🤍", url=invite_link.invite_link),
                InlineKeyboardButton("Start bot", url="https://t.me/FindoSearchBot?start=5909932224")
                ]]
         if message.command[1] != "subscribe":
             try:
                 kk, file_id = message.command[1].split("_", 1)
                 pre = 'checksubp' if kk == 'filep' else 'checksub' 
-                btn.append([InlineKeyboardButton("⟳ Tʀʏ Aɢᴀɪɴ", callback_data=f"{pre}#{file_id}")])
+                btn.append([InlineKeyboardButton("🥀 ᴛʀʏ Aɢᴀɪɴ 🥀", callback_data=f"{pre}#{file_id}")])
             except (IndexError, ValueError):
-                btn.append([InlineKeyboardButton("⟳ Tʀʏ Aɢᴀɪɴ", url=f"https://t.me/{temp.U_NAME}?start={message.command[1]}")])
+                btn.append([InlineKeyboardButton("🥀 ᴛʀʏ ᴀɢᴀɪɴ 🥀", url=f"https://t.me/{temp.U_NAME}?start={message.command[1]}")])
                 
         try:
             return await client.send_message(chat_id=message.from_user.id, text=FORCE_SUB_TEXT, reply_markup=InlineKeyboardMarkup(btn), parse_mode=enums.ParseMode.DEFAULT)
@@ -71,13 +71,13 @@ async def start(client, message):
         
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         buttons = [[
-            InlineKeyboardButton("➕️ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Cʜᴀᴛ ➕", url=f"http://t.me/{temp.U_NAME}?startgroup=true")
+            InlineKeyboardButton("✨ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀᴛ ✨", url=f"http://t.me/{temp.U_NAME}?startgroup=true")
             ],[
-            InlineKeyboardButton("Sᴇᴀʀᴄʜ 🔎", switch_inline_query_current_chat=''), 
-            InlineKeyboardButton("Cʜᴀɴɴᴇʟ 🔈", url="https://t.me/AgsModsOG")
+            InlineKeyboardButton("ꜱᴇᴀʀᴄʜ 🔎", switch_inline_query_current_chat=''), 
+            InlineKeyboardButton("ᴄʜᴀɴɴᴇʟ 🔈", url="https://t.me/AgsModsOG")
             ],[      
-            InlineKeyboardButton("Hᴇʟᴩ 🕸️", callback_data="help"),
-            InlineKeyboardButton("Aʙᴏᴜᴛ ✨", callback_data="about")
+            InlineKeyboardButton("ʜᴇʟᴩ ", callback_data="help"),
+            InlineKeyboardButton("ᴀʙᴏᴜᴛ ", callback_data="about")
         ]]
         m = await message.reply_sticker("CAACAgUAAxkBAAJZtmZSPxpeDEIwobQtSQnkeGbwNjsyAAJjDgACjPuwVS9WyYuOlsqENQQ")
         await asyncio.sleep(2)
@@ -328,9 +328,9 @@ async def settings(client, message):
 
 @Client.on_message(filters.command('set_template'))
 async def save_template(client, message):
-    sts = await message.reply("Cʜᴇᴄᴋɪɴɢ Tᴇᴍᴘʟᴀᴛᴇ")
+    sts = await message.reply("☣️ᴄʜᴇᴄᴋɪɴɢ ᴛᴇᴍᴘʟᴀᴛᴇ ☣️")
     userid = message.from_user.id if message.from_user else None
-    if not userid: return await message.reply(f"Yᴏᴜ Aʀᴇ Aɴᴏɴʏᴍᴏᴜs Aᴅᴍɪɴ. Usᴇ /connect {message.chat.id} Iɴ PM")
+    if not userid: return await message.reply(f"ʏᴏᴜ ᴀʀᴇ ᴡɴᴏɴʏᴍᴏᴜs ᴀᴅᴍɪɴ. ᴜsᴇ /connect {message.chat.id} Iɴ PM")
     chat_type = message.chat.type
     if chat_type == enums.ChatType.PRIVATE:
         grpid = await active_connection(str(userid))
@@ -340,9 +340,9 @@ async def save_template(client, message):
                 chat = await client.get_chat(grpid)
                 title = chat.title
             except:
-                return await message.reply_text("Mᴀᴋᴇ Sᴜʀᴇ I'ᴍ Pʀᴇsᴇɴᴛ Iɴ Yᴏᴜʀ Gʀᴏᴜᴘ !!", quote=True)
+                return await message.reply_text("ᴍᴀᴋᴇ ꜱᴜʀᴇ ɪ'ᴍ ᴩʀᴇsᴇɴᴛ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ !!", quote=True)
         else:
-            return await message.reply_text("I'ᴍ Nᴏᴛ Cᴏɴɴᴇᴄᴛᴇᴅ Tᴏ Aɴʏ Gʀᴏᴜᴘs!", quote=True)
+            return await message.reply_text("ɪ'ᴍ ɴᴏᴛ ᴄᴏɴɴᴇᴄᴛᴇᴅ ᴛᴏ ᴀɴʏ ɢʀᴏᴜᴘs!", quote=True)
     elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         grp_id = message.chat.id
         title = message.chat.title
@@ -356,12 +356,12 @@ async def save_template(client, message):
     if len(message.command) < 2: return await sts.edit("No Iɴᴩᴜᴛ!!")
     template = message.text.split(" ", 1)[1]
     await save_group_settings(grp_id, 'template', template)
-    await sts.edit(f"Sᴜᴄᴄᴇssғᴜʟʟʏ Cʜᴀɴɢᴇᴅ Tᴇᴍᴘʟᴀᴛᴇ Fᴏʀ {title} Tᴏ\n\n{template}")
+    await sts.edit(f"♦️ꜱᴜᴄᴄᴇssғᴜʟʟʏ ᴄʜᴀɴɢᴇᴅ ᴛᴇᴍᴘʟᴀᴛᴇ ꜰᴏʀ♦️ {title} Tᴏ\n\n{template}")
 
 
 @Client.on_message(filters.command('get_template'))
 async def geg_template(client, message):
-    sts = await message.reply("Cʜᴇᴄᴋɪɴɢ Tᴇᴍᴘʟᴀᴛᴇ")
+    sts = await message.reply("⚠️ᴄʜᴇᴄᴋɪɴɢ ᴛᴇᴍᴘʟᴀᴛᴇ ⚠️")
     userid = message.from_user.id if message.from_user else None
     if not userid: return await message.reply(f"Yᴏᴜ Aʀᴇ Aɴᴏɴʏᴍᴏᴜs Aᴅᴍɪɴ. Usᴇ /connect {message.chat.id} Iɴ PM")
     chat_type = message.chat.type
