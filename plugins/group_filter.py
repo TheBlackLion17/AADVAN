@@ -346,7 +346,8 @@ async def advantage_spell_chok(msg):
     g_s += await search_gagala(msg.text)
     gs_parsed = []
     if not g_s:
-        k = await msg.reply("I Cᴏᴜʟᴅɴ'ᴛ Fɪɴᴅ Aɴʏ Mᴏᴠɪᴇ Iɴ Tʜᴀᴛ Nᴀᴍᴇ")
+        buttons = [[InlineKeyboardButton("📢 Report to Admin", callback_data=f"report_{message.from_user.id}_{requested_file}")]]
+        k = await msg.reply("I Cᴏᴜʟᴅɴ'ᴛ Fɪɴᴅ Aɴʏ Mᴏᴠɪᴇ Iɴ Tʜᴀᴛ Nᴀᴍᴇ", reply_markup=InlineKeyboardMarkup(buttons))
         await asyncio.sleep(8)
         return await k.delete()
     regex = re.compile(r".*(imdb|wikipedia).*", re.IGNORECASE)  # look for imdb / wiki results
@@ -378,6 +379,22 @@ async def advantage_spell_chok(msg):
     btn = [[InlineKeyboardButton(text=movie.strip(), callback_data=f"spolling#{user}#{k}",)] for k, movie in enumerate(movielist)]
     btn.append([InlineKeyboardButton(text="Close", callback_data=f'spolling#{user}#close_spellcheck')])
     await msg.reply("I Cᴏᴜʟᴅɴ'ᴛ Fɪɴᴅ Aɴʏᴛʜɪɴɢ Rᴇʟᴀᴛᴇᴅ Tᴏ Tʜᴀᴛ. Dɪᴅ Yᴏᴜ Mᴇᴀɴ Aɴʏ Oɴᴇ Oғ Tʜᴇsᴇ?", reply_markup=InlineKeyboardMarkup(btn))
+    
+    
+async def report_to_admin(client, callback_query):
+    _, user_id, file_name = callback_query.data.split("_")
+    
+    report_text = f"🔍 **File Request Report**\n👤 User: [{user_id}](tg://user?id={user_id})\n📂 File: {file_name}"
+    
+    # Admin action buttons
+    buttons = [
+        [InlineKeyboardButton("✅ Check Spelling", callback_data=f"check_spelling_{user_id}_{file_name}")],
+        [InlineKeyboardButton("📂 File Uploaded", callback_data=f"file_uploaded_{user_id}_{file_name}")],
+        [InlineKeyboardButton("❌ I Can't Find It", callback_data=f"not_found_{user_id}_{file_name}")]
+    ]
+    
+    await client.send_message(REQ_CHANNEL_ID, report_text, reply_markup=InlineKeyboardMarkup(buttons))
+    await callback_query.message.edit_text("✅ Report sent to admin.")
 
 
 async def manual_filters(client, message, text=False):
