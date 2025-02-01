@@ -152,7 +152,7 @@ async def advantage_spoll_choker(bot, query):
             await auto_filter(bot, query, k)
         else:
             buttons = [[InlineKeyboardButton("📢 Report to Admin", callback_data=f"report_{message.from_user.id}_{requested_file}")]]
-            k = await query.message.edit('This Movie Not Found In DataBase', reply_markup=InlineKeyboardMarkup(buttons)))
+            k = await query.message.edit('This Movie Not Found In DataBase', reply_markup=InlineKeyboardMarkup(buttons))
             await asyncio.sleep(10)
             await k.delete()
 
