@@ -151,51 +151,9 @@ async def advantage_spoll_choker(bot, query):
             k = (movie, files, offset, total_results)
             await auto_filter(bot, query, k)
         else:
-            buttons = [[InlineKeyboardButton("📢 Report to Admin", callback_data=f"report_{message.from_user.id}_{requested_file}")]]
-            k = await query.message.edit('This Movie Not Found In DataBase', reply_markup=InlineKeyboardMarkup(buttons))
+            k = await query.message.edit('This Movie Not Found In DataBase')
             await asyncio.sleep(10)
             await k.delete()
-
-
-@Client.on_callback_query(filters.regex("^report_"))
-async def report_to_admin(client, callback_query):
-    _, user_id, file_name = callback_query.data.split("_")
-    
-    report_text = f"🔍 **File Request Report**\n👤 User: [{user_id}](tg://user?id={user_id})\n📂 File: {file_name}"
-    
-    # Admin action buttons
-    buttons = [
-        [InlineKeyboardButton("✅ Check Spelling", callback_data=f"check_spelling_{user_id}_{file_name}")],
-        [InlineKeyboardButton("📂 File Uploaded", callback_data=f"file_uploaded_{user_id}_{file_name}")],
-        [InlineKeyboardButton("❌ I Can't Find It", callback_data=f"not_found_{user_id}_{file_name}")]
-    ]
-    
-    await client.send_message(REQ_CHANNEL_ID, report_text, reply_markup=InlineKeyboardMarkup(buttons))
-    await callback_query.message.edit_text("✅ Report sent to admin.")
-
-@Client.on_callback_query(filters.regex("^check_spelling_"))
-async def check_spelling(client, callback_query):
-    _, user_id, file_name = callback_query.data.split("_")
-    
-    # Send message to the user who requested the file
-    await client.send_message(user_id, f"⚠️ Admin noticed a spelling issue with the file name: {file_name}. Please check the spelling and try again.")
-    await callback_query.answer("✅ Spelling issue reported to user.")
-
-@Client.on_callback_query(filters.regex("^file_uploaded_"))
-async def file_uploaded(client, callback_query):
-    _, user_id, file_name = callback_query.data.split("_")
-    
-    # Send message to the user who requested the file
-    await client.send_message(user_id, f"✅ The file **{file_name}** has been uploaded successfully.")
-    await callback_query.answer("✅ File upload confirmed and reported to user.")
-
-@Client.on_callback_query(filters.regex("^not_found_"))
-async def file_not_found(client, callback_query):
-    _, user_id, file_name = callback_query.data.split("_")
-    
-    # Send message to the user who requested the file
-    await client.send_message(user_id, f"❌ Admin could not find the file **{file_name}**. It may not be available.")
-    await callback_query.answer("❌ File not found and reported to user.")
 
 
 @Client.on_message(filters.group & filters.text & filters.incoming & filters.chat(AUTH_GROUPS) if AUTH_GROUPS else filters.text & filters.incoming & filters.group)
